@@ -9,14 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Service class for handling flight-related operations.
+ * Service class responsible for handling flight-related operations, including pathfinding and weather data retrieval.
  */
 @Service
 public class FlightService {
@@ -27,17 +26,23 @@ public class FlightService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
+    /**
+     * Constructor for FlightService.
+     *
+     * @param restTemplate  RestTemplate bean for making HTTP requests.
+     * @param objectMapper  ObjectMapper for JSON serialization and deserialization.
+     */
     public FlightService(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
     }
 
     /**
-     * Finds the flight path between two airports and retrieves weather information for the path.
+     * Finds the flight path and retrieves weather data for the given flight.
      *
-     * @param flightDTO The DTO containing start and end airport codes.
-     * @return A JSON string representing the flight path and weather information.
-     * @throws Exception If an error occurs during the process.
+     * @param flightDTO The FlightDTO object containing flight details.
+     * @return A JSON string representing the flight path and weather data.
+     * @throws Exception If an error occurs during pathfinding or weather data retrieval.
      */
     public String findPath(FlightDTO flightDTO) throws Exception {
         HttpHeaders headers = new HttpHeaders();
@@ -55,11 +60,9 @@ public class FlightService {
 
         List<SimpleWeatherResponse> weather = getWeatherForMultipleLocations(path);
 
-        path.substring(0, path.length() - 1);
 
         String weatherJson = objectMapper.writeValueAsString(weather);
-
-        String resultJson = path + ",\"weather\":" + weatherJson + "}";
+        String resultJson = path.substring(0, path.length() - 2) + ",\"weather\":" + weatherJson + "}";
 
         if (response.getStatusCode() == HttpStatus.OK) {
             return resultJson;
@@ -69,10 +72,10 @@ public class FlightService {
     }
 
     /**
-     * Retrieves the latitude and longitude coordinates for a given airport code.
+     * Retrieves the latitude and longitude coordinates for a given IATA code.
      *
      * @param iataCode The IATA code of the airport.
-     * @return An array containing latitude and longitude values.
+     * @return An array containing latitude and longitude coordinates.
      */
     public int[] getLatLng(String iataCode) {
         String url = "https://iatageo.com/getLatLng/" + iataCode;
@@ -86,15 +89,16 @@ public class FlightService {
     }
 
     /**
-     * Retrieves weather information for multiple locations along the flight path.
+     * Retrieves weather data for multiple locations along the flight path.
      *
-     * @param jsonString The JSON string representing the flight path.
-     * @return A list of SimpleWeatherResponse objects containing weather information.
-     * @throws Exception If an error occurs during the process.
+     * @param jsonString The JSON string representing the flight path coordinates.
+     * @return A list of SimpleWeatherResponse objects containing weather data.
+     * @throws Exception If an error occurs during weather data retrieval.
      */
     public List<SimpleWeatherResponse> getWeatherForMultipleLocations(String jsonString) throws Exception {
         CoordinatePath coordinatePath = objectMapper.readValue(jsonString, CoordinatePath.class);
         List<double[]> coordinates = coordinatePath.getPath();
+
         List<SimpleWeatherResponse> weatherResponses = new ArrayList<>();
         for (double[] coordinate : coordinates) {
             double latitude = coordinate[0];

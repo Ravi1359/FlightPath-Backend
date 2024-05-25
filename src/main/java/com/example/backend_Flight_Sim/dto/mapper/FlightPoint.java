@@ -1,15 +1,15 @@
 package com.example.backend_Flight_Sim.dto.mapper;
 
 /**
- * Represents a flight point containing an IATA code.
+ * A class representing a flight point, typically an airport identified by its IATA code.
  */
 public class FlightPoint {
     private String iataCode;
 
     /**
-     * Gets the IATA code of the flight point.
+     * Retrieves the IATA code of the flight point.
      *
-     * @return the IATA code.
+     * @return The IATA code of the flight point.
      */
     public String getIataCode() {
         return iataCode;
@@ -18,7 +18,7 @@ public class FlightPoint {
     /**
      * Sets the IATA code of the flight point.
      *
-     * @param iataCode the IATA code to set.
+     * @param iataCode The IATA code of the flight point to set.
      */
     public void setIataCode(String iataCode) {
         this.iataCode = iataCode;

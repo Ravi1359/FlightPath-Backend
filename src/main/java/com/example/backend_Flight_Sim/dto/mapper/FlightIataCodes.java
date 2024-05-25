@@ -1,17 +1,17 @@
 package com.example.backend_Flight_Sim.dto.mapper;
 
 /**
- * Represents flight IATA codes containing departure and arrival IATA codes.
+ * A class representing the IATA codes of departure and arrival airports for a flight.
  */
 public class FlightIataCodes {
     private String departureIataCode;
     private String arrivalIataCode;
 
     /**
-     * Constructs a new FlightIataCodes object with the given departure and arrival IATA codes.
+     * Constructs a FlightIataCodes object with the given departure and arrival IATA codes.
      *
-     * @param departureIataCode the departure IATA code.
-     * @param arrivalIataCode   the arrival IATA code.
+     * @param departureIataCode The IATA code of the departure airport.
+     * @param arrivalIataCode   The IATA code of the arrival airport.
      */
     public FlightIataCodes(String departureIataCode, String arrivalIataCode) {
         this.departureIataCode = departureIataCode;
@@ -19,36 +19,36 @@ public class FlightIataCodes {
     }
 
     /**
-     * Gets the departure IATA code.
+     * Retrieves the IATA code of the departure airport.
      *
-     * @return the departure IATA code.
+     * @return The IATA code of the departure airport.
      */
     public String getDepartureIataCode() {
         return departureIataCode;
     }
 
     /**
-     * Sets the departure IATA code.
+     * Sets the IATA code of the departure airport.
      *
-     * @param departureIataCode the departure IATA code to set.
+     * @param departureIataCode The IATA code of the departure airport to set.
      */
     public void setDepartureIataCode(String departureIataCode) {
         this.departureIataCode = departureIataCode;
     }
 
     /**
-     * Gets the arrival IATA code.
+     * Retrieves the IATA code of the arrival airport.
      *
-     * @return the arrival IATA code.
+     * @return The IATA code of the arrival airport.
      */
     public String getArrivalIataCode() {
         return arrivalIataCode;
     }
 
     /**
-     * Sets the arrival IATA code.
+     * Sets the IATA code of the arrival airport.
      *
-     * @param arrivalIataCode the arrival IATA code to set.
+     * @param arrivalIataCode The IATA code of the arrival airport to set.
      */
     public void setArrivalIataCode(String arrivalIataCode) {
         this.arrivalIataCode = arrivalIataCode;

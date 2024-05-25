@@ -4,15 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * Represents a path of coordinates.
+ * A class representing a coordinate path.
  */
 public class CoordinatePath {
     private List<double[]> path;
 
     /**
-     * Gets the list of coordinates that form the path.
+     * Retrieves the path of coordinates.
      *
-     * @return the list of coordinates as an array of double values.
+     * @return The list of coordinates representing the path.
      */
     @JsonProperty("path")
     public List<double[]> getPath() {
@@ -20,9 +20,9 @@ public class CoordinatePath {
     }
 
     /**
-     * Sets the list of coordinates that form the path.
+     * Sets the path of coordinates.
      *
-     * @param path the list of coordinates to set, each represented as an array of double values.
+     * @param path The list of coordinates representing the path to set.
      */
     public void setPath(List<double[]> path) {
         this.path = path;

@@ -1,7 +1,7 @@
 package com.example.backend_Flight_Sim.dto.mapper;
 
 /**
- * Represents the information of an airport.
+ * A class representing airport information including latitude, longitude, code, and name.
  */
 public class AirportInfo {
     private String latitude;
@@ -10,9 +10,9 @@ public class AirportInfo {
     private String name;
 
     /**
-     * Gets the latitude of the airport.
+     * Retrieves the latitude of the airport.
      *
-     * @return the latitude of the airport.
+     * @return The latitude of the airport.
      */
     public String getLatitude() {
         return latitude;
@@ -21,16 +21,16 @@ public class AirportInfo {
     /**
      * Sets the latitude of the airport.
      *
-     * @param latitude the latitude to set.
+     * @param latitude The latitude to set.
      */
     public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
     /**
-     * Gets the longitude of the airport.
+     * Retrieves the longitude of the airport.
      *
-     * @return the longitude of the airport.
+     * @return The longitude of the airport.
      */
     public String getLongitude() {
         return longitude;
@@ -39,16 +39,16 @@ public class AirportInfo {
     /**
      * Sets the longitude of the airport.
      *
-     * @param longitude the longitude to set.
+     * @param longitude The longitude to set.
      */
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 
     /**
-     * Gets the code of the airport.
+     * Retrieves the code of the airport.
      *
-     * @return the code of the airport.
+     * @return The code of the airport.
      */
     public String getCode() {
         return code;
@@ -57,16 +57,16 @@ public class AirportInfo {
     /**
      * Sets the code of the airport.
      *
-     * @param code the code to set.
+     * @param code The code to set.
      */
     public void setCode(String code) {
         this.code = code;
     }
 
     /**
-     * Gets the name of the airport.
+     * Retrieves the name of the airport.
      *
-     * @return the name of the airport.
+     * @return The name of the airport.
      */
     public String getName() {
         return name;
@@ -75,7 +75,7 @@ public class AirportInfo {
     /**
      * Sets the name of the airport.
      *
-     * @param name the name to set.
+     * @param name The name to set.
      */
     public void setName(String name) {
         this.name = name;
