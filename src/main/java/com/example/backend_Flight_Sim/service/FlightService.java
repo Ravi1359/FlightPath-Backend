@@ -15,12 +15,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Service class for handling flight-related operations.
+ */
 @Service
 public class FlightService {
 
     @Value("${open-meteo.api.url}")
     private String apiUrl;
-
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -30,8 +32,14 @@ public class FlightService {
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * Finds the flight path between two airports and retrieves weather information for the path.
+     *
+     * @param flightDTO The DTO containing start and end airport codes.
+     * @return A JSON string representing the flight path and weather information.
+     * @throws Exception If an error occurs during the process.
+     */
     public String findPath(FlightDTO flightDTO) throws Exception {
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         int[] start = getLatLng(flightDTO.getStart());
@@ -40,7 +48,6 @@ public class FlightService {
         String stop = Arrays.toString(end);
 
         String requestBody = "{\"start\": " + begin + ", \"goal\": " + stop + "}";
-        System.out.println(requestBody);
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity("https://astar-flight-pathfinding.onrender.com/path", entity, String.class);
@@ -54,15 +61,19 @@ public class FlightService {
 
         String resultJson = path + ",\"weather\":" + weatherJson + "}";
 
-
         if (response.getStatusCode() == HttpStatus.OK) {
             return resultJson;
         } else {
             return "Error: " + response.getStatusCodeValue();
         }
-
     }
 
+    /**
+     * Retrieves the latitude and longitude coordinates for a given airport code.
+     *
+     * @param iataCode The IATA code of the airport.
+     * @return An array containing latitude and longitude values.
+     */
     public int[] getLatLng(String iataCode) {
         String url = "https://iatageo.com/getLatLng/" + iataCode;
         AirportInfo airportInfo = restTemplate.getForObject(url, AirportInfo.class);
@@ -71,15 +82,19 @@ public class FlightService {
             int longitude = (int) Double.parseDouble(airportInfo.getLongitude());
             return new int[]{latitude, longitude};
         }
-        return null; // or throw an exception if preferred
+        return null;
     }
 
+    /**
+     * Retrieves weather information for multiple locations along the flight path.
+     *
+     * @param jsonString The JSON string representing the flight path.
+     * @return A list of SimpleWeatherResponse objects containing weather information.
+     * @throws Exception If an error occurs during the process.
+     */
     public List<SimpleWeatherResponse> getWeatherForMultipleLocations(String jsonString) throws Exception {
-        // Parse the JSON string to extract coordinates
         CoordinatePath coordinatePath = objectMapper.readValue(jsonString, CoordinatePath.class);
         List<double[]> coordinates = coordinatePath.getPath();
-
-        // Fetch weather data for each coordinate
         List<SimpleWeatherResponse> weatherResponses = new ArrayList<>();
         for (double[] coordinate : coordinates) {
             double latitude = coordinate[0];
@@ -99,50 +114,4 @@ public class FlightService {
         }
         return weatherResponses;
     }
-//
-//    public FlightIataCodes getFlightIataCodes(String combinedFlightName, String scheduledDepartureDate) {
-//        // Extract carrier code and flight number
-//        String[] flightInfo = extractCarrierCodeAndFlightNumber(combinedFlightName);
-//        String carrierCode = flightInfo[0];
-//        String flightNumber = flightInfo[1];
-//
-//        // Build the URL with extracted values
-//        String url = UriComponentsBuilder.fromHttpUrl(apiUrl)
-//                .queryParam("carrierCode", carrierCode)
-//                .queryParam("flightNumber", flightNumber)
-//                .queryParam("scheduledDepartureDate", scheduledDepartureDate)
-//                .toUriString();
-//
-//        // Set up the headers
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.set("Authorization", "Bearer " + apiKey);
-//
-//        // Create the HttpEntity with the headers
-//        HttpEntity<String> entity = new HttpEntity<>(headers);
-//
-//        // Make the request
-//        ResponseEntity<FlightData> response = restTemplate.exchange(url, HttpMethod.GET, entity, FlightData.class);
-//        FlightData flightData = response.getBody();
-//
-//        String departureIataCode = null;
-//        String arrivalIataCode = null;
-//
-//        if (flightData != null && flightData.getData() != null && !flightData.getData().isEmpty()) {
-//            List<FlightPoint> flightPoints = flightData.getData().get(0).getFlightPoints();
-//            if (flightPoints != null && !flightPoints.isEmpty()) {
-//                departureIataCode = flightPoints.get(0).getIataCode();
-//                if (flightPoints.size() > 1) {
-//                    arrivalIataCode = flightPoints.get(1).getIataCode();
-//                }
-//            }
-//        }
-
-//        return new FlightIataCodes(departureIataCode, arrivalIataCode);
-//    }
-
-//    public static String[] extractCarrierCodeAndFlightNumber(String combinedFlightName) {
-//        // Regular expression to split carrier code and flight number
-//        String[] result = combinedFlightName.split("(?<=\\D)(?=\\d)");
-//        return result;
-//    }
 }
